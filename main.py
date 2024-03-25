@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import random
 import yaml
 
 intents = discord.Intents.all()
@@ -37,10 +38,22 @@ async def start_command(ctx):
         await interaction.response.send_message(text)
 
     view = discord.ui.View()
-    button = discord.ui.Button(label='Начать', style=discord.ButtonStyle.blurple, custom_id='show_text_button')
+    button = discord.ui.Button(label='Начать', style=discord.ButtonStyle.danger, custom_id='text_button')
     button.callback = button_callback
     view.add_item(button)
 
     await message.edit(embed=embed, view=view)
 
-bot.run('Secret')
+@bot.command(name='random')
+async def random_website(ctx):
+    file_path = 'sus.txt'
+
+    try:
+        with open(file_path, 'r') as file:
+            websites = file.readlines()
+            random_website = random.choice(websites)
+            await ctx.send(f'Сайт на сегодня: {random_website}')
+    except FileNotFoundError:
+        await ctx.send("Ой, ошибочка!")
+
+bot.run('Secretik')
